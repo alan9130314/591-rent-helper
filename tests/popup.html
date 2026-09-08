@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>591 租屋筆記</title><link rel="stylesheet" href="../popup.css"></head>
+<body>
+<header><span class="eyebrow">自己的找房清單</span><h1>591 租屋筆記<span class="dot">.</span></h1><p>記下看過的房子，留時間給下一間。</p></header>
+<main>
+<form id="add-form">
+<label for="url">物件 ID 或網址</label><input id="url" type="text" placeholder="21964749 或 https://rent.591.com.tw/21964749" required autocomplete="off">
+<label for="note">名稱或備註 <span class="muted">選填</span></label><input id="note" maxlength="120" placeholder="例如：近捷運，但採光不足">
+<div class="form-row"><div><label for="status">物件狀態</label><select id="status"><option value="seen">已看過</option><option value="rejected">不考慮</option><option value="interested">有興趣</option></select></div><button type="submit" id="save">加入紀錄</button></div>
+</form>
+<p id="message" role="status" aria-live="polite"></p>
+<section class="page-filter"><label for="page-filter">591 列表顯示</label><select id="page-filter"></select><small>套用至目前頁面已載入的物件，包含精選推薦。</small></section>
+<section><div class="list-heading"><h2>我的紀錄 <span id="count">0</span></h2><select id="record-filter" aria-label="篩選我的紀錄"><option value="all">所有狀態</option><option value="seen">已看過</option><option value="rejected">不考慮</option><option value="interested">有興趣</option></select></div><input id="search" type="search" placeholder="搜尋編號或備註" aria-label="搜尋紀錄"><div id="records"></div></section>
+</main><footer>本機儲存 · 不會自動記錄瀏覽 · 非 591 官方工具</footer>
+<script src="mock-chrome.js"></script><script src="../shared.js"></script><script src="../popup.js"></script>
+</body></html>

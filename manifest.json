@@ -1,0 +1,1 @@
+{"manifest_version":3,"name":"591 租屋筆記","version":"1.0.0","description":"手動記錄租屋物件，在 591 列表標示與篩選已看過、不考慮及有興趣的房子。","permissions":["storage"],"action":{"default_popup":"popup.html","default_title":"591 租屋筆記"},"content_scripts":[{"matches":["https://rent.591.com.tw/*"],"js":["shared.js","content.js"],"css":["content.css"],"run_at":"document_idle"}]}
