@@ -12,3 +12,9 @@ window.chrome={storage:{local:{
  async set(values){const next={...state,...values};localStorage.setItem('rh591-test',JSON.stringify(next));publish(next);},
  async remove(key){const next={...state};delete next[key];localStorage.setItem('rh591-test',JSON.stringify(next));publish(next);}
 },onChanged:{addListener(fn){listeners.push(fn);}}}};
+
+// Simulate activeTab without inspecting any real browser tabs.
+chrome.tabs={async query(){
+ const url=new URLSearchParams(location.search).get('current') || '';
+ return [{url,title:new URLSearchParams(location.search).get('title') || ''}];
+}};

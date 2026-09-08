@@ -4,3 +4,8 @@ node_modules/
 .env
 .env.*
 !.env.example
+
+__MACOSX/
+._*
+Thumbs.db
+Desktop.ini
