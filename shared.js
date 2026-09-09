@@ -1,6 +1,20 @@
 (function(root) {
   const statuses = {seen:'已看過', rejected:'不考慮', interested:'有興趣'};
   const filters = {all:'全部物件', fresh:'只看未標記', eligible:'隱藏不考慮', ...statuses};
+  const defaultKeywords=['限女','社宅','社會住宅'];
+  function normalizeKeywords(value) {
+    const words=Array.isArray(value)?value:typeof value==='string'?value.split(/[\n,，、;；]+/):[];
+    return [...new Set(words.filter(v=>typeof v==='string').map(v=>v.normalize('NFKC').trim().toLowerCase()).filter(Boolean))];
+  }
+  function keywordSettings(data) {
+    const setting=data.titleKeywordFilter;
+    return {enabled:setting?.enabled!==false,words:normalizeKeywords(Array.isArray(setting?.words)?setting.words:defaultKeywords)};
+  }
+  function titleKeywordMatch(title,settings) {
+    if(!settings.enabled || typeof title!=='string')return false;
+    const normalized=title.normalize('NFKC').toLowerCase();
+    return settings.words.some(word=>word && normalized.includes(word));
+  }
   function parseURL(input) {
     try {
       const u = new URL(input.trim());
@@ -60,6 +74,6 @@
     }
     return {updates,added,replaced,skipped};
   }
-  root.RentHelper = {statuses,filters,parseURL,parseInput,cleanTitle,matches,entries,parseBackup,makeBackup,mergeBackup,key:id=>'listing:'+id};
+  root.RentHelper = {statuses,filters,defaultKeywords,normalizeKeywords,keywordSettings,titleKeywordMatch,parseURL,parseInput,cleanTitle,matches,entries,parseBackup,makeBackup,mergeBackup,key:id=>'listing:'+id};
   if(typeof module !== 'undefined') module.exports = root.RentHelper;
 })(globalThis);

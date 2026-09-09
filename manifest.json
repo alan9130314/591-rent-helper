@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "591 租屋筆記",
-  "version": "1.1.0",
+  "version": "1.3.0",
   "description": "手動記錄租屋物件，在 591 列表標示與篩選已看過、不考慮及有興趣的房子。",
   "permissions": [
     "storage",

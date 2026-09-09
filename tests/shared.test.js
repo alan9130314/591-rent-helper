@@ -67,3 +67,20 @@ test('合併預設保留本機，可選擇覆蓋且不刪除其他紀錄',()=>{
  assert.equal(Object.hasOwn(replaced.updates,'filter'),false);
  assert.equal(Object.hasOwn(replaced.updates,'listing:789'),false);
 });
+
+test('關鍵字預設開啟，空清單與停用設定不恢復預設',()=>{
+ assert.deepEqual(H.keywordSettings({}),{enabled:true,words:['限女','社宅','社會住宅']});
+ assert.deepEqual(H.keywordSettings({titleKeywordFilter:{enabled:false,words:[]}}),{enabled:false,words:[]});
+ assert.equal(H.titleKeywordMatch('限女套房',H.keywordSettings({titleKeywordFilter:{enabled:false}})),false);
+ assert.equal(H.titleKeywordMatch('限女套房',{enabled:true,words:[]}),false);
+});
+test('關鍵字去空白去重，支援中英文分隔與全形英文',()=>{
+ assert.deepEqual(H.normalizeKeywords(' 限女\n社宅，社會住宅、限女; ＡＢＣ；abc,, '),['限女','社宅','社會住宅','abc']);
+});
+test('標題任一關鍵字命中才隱藏，採字面比對而非正規表示式',()=>{
+ const settings=H.keywordSettings({});
+ for(const title of ['近捷運限女套房','優質社宅','社會住宅出租'])assert.equal(H.titleKeywordMatch(title,settings),true);
+ for(const title of ['',null,'近捷運套房'])assert.equal(H.titleKeywordMatch(title,settings),false);
+ assert.equal(H.titleKeywordMatch('AbC套房',{enabled:true,words:['abc']}),true);
+ assert.equal(H.titleKeywordMatch('一般套房',{enabled:true,words:['.*']}),false);
+});

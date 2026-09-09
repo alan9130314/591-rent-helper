@@ -1,1 +1,1 @@
-{"name":"591-rent-helper","version":"1.1.0","private":true,"scripts":{"test":"node --test","check":"node --check shared.js && node --check popup.js && node --check content.js"}}
+{"name":"591-rent-helper","version":"1.3.0","private":true,"scripts":{"test":"node --test","check":"node --check shared.js && node --check popup.js && node --check content.js"}}

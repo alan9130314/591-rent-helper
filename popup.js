@@ -7,6 +7,7 @@ async function write(action) {
 }
 for(const [v,l] of Object.entries(H.filters)) $('page-filter').add(new Option(l,v));
 function render() {
+  renderKeywordSettings();
   renderCurrent();
   const all=H.entries(data).sort((a,b)=>b.updatedAt-a.updatedAt);
   $('count').textContent=all.length;
@@ -145,4 +146,25 @@ $('import-file').onchange=async()=>{
     backupMessage('匯入完成：新增 '+result.added+' 筆、覆蓋 '+result.replaced+' 筆、保留本機 '+result.skipped+' 筆。');
   }catch(error){backupMessage('匯入失敗：'+error.message,true);}
   finally{$('import-file').value='';transferBusy(false);}
+};
+
+let keywordDirty=false;
+function renderKeywordSettings(){
+  if(keywordDirty)return;
+  const settings=H.keywordSettings(data);
+  $('keyword-enabled').checked=settings.enabled;
+  $('keyword-words').value=settings.words.join('\n');
+}
+$('keyword-words').oninput=()=>{keywordDirty=true;};
+$('keyword-enabled').onchange=()=>{keywordDirty=true;};
+$('keyword-form').onsubmit=async event=>{
+  event.preventDefault();
+  const settings={enabled:$('keyword-enabled').checked,words:H.normalizeKeywords($('keyword-words').value)};
+  $('keyword-save').disabled=true;$('keyword-enabled').disabled=true;$('keyword-words').disabled=true;
+  try{
+    await chrome.storage.local.set({titleKeywordFilter:settings});
+    data.titleKeywordFilter=settings;keywordDirty=false;renderKeywordSettings();
+    $('keyword-message').className='';$('keyword-message').textContent='已儲存，591 列表會同步套用。';
+  }catch{$('keyword-message').className='error';$('keyword-message').textContent='儲存失敗，請重試。';}
+  finally{$('keyword-save').disabled=false;$('keyword-enabled').disabled=false;$('keyword-words').disabled=false;}
 };
